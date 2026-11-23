@@ -2,8 +2,8 @@
 
 import flask
 from flask import request, redirect, flash, render_template, url_for
-from application.extensions import db
-from application.models import Todo
+from ..extensions import db
+from ..models import Todo
 
 todo_bp = flask.Blueprint(
     'todo',
