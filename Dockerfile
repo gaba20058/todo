@@ -13,4 +13,4 @@ COPY . .
 
 EXPOSE 7345
 
-CMD ["python", "manage.py", "runserver", "--host=0.0.0.0", "--port=7345"]
+CMD ["sh", "-c", "python -c \"from application import create_app; from application.extensions import db; app = create_app(); app.app_context().push(); db.create_all()\" && python manage.py runserver --host=0.0.0.0 --port=7345"]
