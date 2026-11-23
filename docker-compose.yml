@@ -9,6 +9,11 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
     restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
   backend:
     build: .
@@ -22,7 +27,8 @@ services:
     ports:
       - "7345:7345"
     depends_on:
-      - db
+      db:
+        condition: service_healthy  # <-- Ждем, пока база будет готова
     restart: unless-stopped
 
   frontend:
