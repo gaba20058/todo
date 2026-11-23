@@ -5,30 +5,25 @@ basedir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
 class Config(object):
-    # Flask config
     SECRET_KEY = '^753*&FdFS#4D'
     SQLALCHEMY_RECORD_QUERIES = True
     SQLALCHEMY_TRACK_MODIFICATIONS = True
 
-    # Email config
-    MAIL_SERVER = 'smtp.qq.com'
-    MAIL_PORT = 465
-    MAIL_USE_SSL = False
-    MAIL_USERNAME = ''
-    MAIL_PASSWORD = ''
-
-    # Babel config
-    BABEL_DEFAULT_LOCALE = 'zh'
-    BABEL_DEFAULT_TIMEZONE = 'CST'
-
 
 class DevelopmentConfig(Config):
     DEBUG = True
-    SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(basedir, 'todo.sqlite')  # NOQA
+    SQLALCHEMY_DATABASE_URI = (
+        f"postgresql://{os.getenv('POSTGRES_USER', 'postgres')}:"
+        f"{os.getenv('POSTGRES_PASSWORD', 'postgres')}@"
+        f"{os.getenv('POSTGRES_HOST', 'db')}:"
+        f"{os.getenv('POSTGRES_PORT', '5432')}/"
+        f"{os.getenv('POSTGRES_DB', 'todo_db')}"
+    )
 
 
 class ProductionConfig(Config):
-    SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(basedir, 'todo.sqlite')  # NOQA
+    SQLALCHEMY_DATABASE_URI = DevelopmentConfig.SQLALCHEMY_DATABASE_URI
+
 
 config = {
     'default': DevelopmentConfig,
